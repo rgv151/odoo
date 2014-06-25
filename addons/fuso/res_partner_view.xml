@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id="view_fuso_partner_info_form" model="ir.ui.view">
+            <field name="name">res.partner.fuso.info.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='sales_purchases']" position="remove">
+                </xpath>
+            </field>
+        </record>
+
+   </data>
+</openerp>

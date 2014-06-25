@@ -92,8 +92,8 @@
         <field name="arch" type="xml">
             <form string="Leads Form" version="7.0">
                 <header>
-                    <button name="%(crm.action_crm_lead2opportunity_partner)d" string="Convert to Opportunity" type="action"
-                            help="Convert to Opportunity" class="oe_highlight"/>
+                    <!--<button name="%(crm.action_crm_lead2opportunity_partner)d" string="Convert to Opportunity" type="action"
+                            help="Convert to Opportunity" class="oe_highlight"/>-->
                     <field name="stage_id" widget="statusbar" clickable="True"
                             domain="['&amp;', '|', ('case_default', '=', True), ('section_ids', '=', section_id), '|', ('type', '=', type), ('type', '=', 'both')]"
                             options="{'fold_field': 'fold'}"
@@ -350,20 +350,20 @@
                             help="Leads that did not ask not to be included in mass mailing campaigns"/>
                     <separator />
                     <group expand="0" string="Group By...">
-                        <filter string="Salesperson" domain="[]" context="{'group_by':'user_id'}"/>
-                        <filter string="Team" domain="[]" context="{'group_by':'section_id'}" groups="base.group_multi_salesteams"/>
-                        <filter string="Stage" domain="[]" context="{'group_by':'stage_id'}"/>
-                        <filter string="Customer" help="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <!--<filter string="Salesperson" domain="[]" context="{'group_by':'user_id'}"/>-->
+                        <!--<filter string="Team" domain="[]" context="{'group_by':'section_id'}" groups="base.group_multi_salesteams"/>-->
+                        <!--<filter string="Stage" domain="[]" context="{'group_by':'stage_id'}"/>-->
+                        <!--<filter string="Customer" help="Partner" domain="[]" context="{'group_by':'partner_id'}"/>-->
                         <filter string="Country" domain="[]" context="{'group_by':'country_id'}"/>
-                        <filter string="Referrer" domain="[]" context="{'group_by':'referred'}"/>
+                        <!--<filter string="Referrer" domain="[]" context="{'group_by':'referred'}"/>-->
                         <filter string="Campaign" domain="[]" context="{'group_by':'type_id'}"/>
                         <filter string="Channel" domain="[]" context="{'group_by':'channel_id'}"/>
                         <filter string="Creation" domain="[]" context="{'group_by':'create_date'}"/>
-                        <filter string="Last Post (weekly)" name="group_message_last_post" domain="[]" context="{'group_by':'message_last_post:week'}"/>
+                        <!--<filter string="Last Post (weekly)" name="group_message_last_post" domain="[]" context="{'group_by':'message_last_post:week'}"/>-->
                     </group>
                     <group string="Display">
                         <filter string="Countries" context="{'invisible_country': False}" help="Countries"/>
-                        <filter string="Sales Team" context="{'invisible_section': False}" domain="[]" help="Sales Team" groups="base.group_multi_salesteams"/>
+                        <!--<filter string="Sales Team" context="{'invisible_section': False}" domain="[]" help="Sales Team" groups="base.group_multi_salesteams"/>-->
                     </group>
                 </search>
             </field>
@@ -572,22 +572,22 @@
                     <filter string="Unread Messages" name="message_unread" domain="[('message_unread','=',True)]"/>
                     <separator/>
                     <group expand="0" string="Group By..." colspan="16">
-                        <filter string="Salesperson" domain="[]" context="{'group_by':'user_id'}"/>
-                        <filter string="Team" domain="[]" context="{'group_by':'section_id'}" groups="base.group_multi_salesteams"/>
-                        <filter string="Stage" domain="[]" context="{'group_by':'stage_id'}"/>
+                        <!--<filter string="Salesperson" domain="[]" context="{'group_by':'user_id'}"/>-->
+                        <!--<filter string="Team" domain="[]" context="{'group_by':'section_id'}" groups="base.group_multi_salesteams"/>-->
+                        <!--<filter string="Stage" domain="[]" context="{'group_by':'stage_id'}"/>-->
                         <filter string="Customer" help="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
                         <filter string="Country" domain="[]" context="{'group_by':'country_id'}"/>
-                        <filter string="Priority" domain="[]" context="{'group_by':'priority'}"/>
-                        <filter string="Expected Closing" domain="[]" context="{'group_by':'date_deadline'}"/>
-                        <filter string="Referrer" domain="[]" context="{'group_by':'referred'}"/>
+                        <!--<filter string="Priority" domain="[]" context="{'group_by':'priority'}"/>-->
+                        <!--<filter string="Expected Closing" domain="[]" context="{'group_by':'date_deadline'}"/>-->
+                        <!--<filter string="Referrer" domain="[]" context="{'group_by':'referred'}"/>-->
                         <filter string="Campaign" domain="[]" context="{'group_by':'type_id'}"/>
-                        <filter string="Channel" domain="[]" context="{'group_by':'channel_id'}"/>
-                        <filter string="Creation" domain="[]" context="{'group_by':'create_date'}"/>
-                        <filter string="Last Update Month" domain="[]" context="{'group_by':'write_date'}"/>
-                        <filter string="Last Post (weekly)" name="group_message_last_post" domain="[]" context="{'group_by':'message_last_post:week'}"/>
+                        <!--<filter string="Channel" domain="[]" context="{'group_by':'channel_id'}"/>-->
+                        <!--<filter string="Creation" domain="[]" context="{'group_by':'create_date'}"/>-->
+                        <!--<filter string="Last Update Month" domain="[]" context="{'group_by':'write_date'}"/>-->
+                        <!--<filter string="Last Post (weekly)" name="group_message_last_post" domain="[]" context="{'group_by':'message_last_post:week'}"/>-->
                     </group>
                     <group string="Display">
-                        <filter string="Sales Team" context="{'invisible_section': False}" domain="[]" help="Sales Team" groups="base.group_multi_salesteams"/>
+                        <!--<filter string="Sales Team" context="{'invisible_section': False}" domain="[]" help="Sales Team" groups="base.group_multi_salesteams"/>-->
                         <filter string="Countries" context="{'invisible_country': False}" help="Countries"/>
                     </group>
                 </search>
