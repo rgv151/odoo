@@ -81,10 +81,10 @@
             <field name="act_window_id" ref="action_report_crm_phonecall"/>
         </record>
 
-        <menuitem name="Phone Calls Analysis"
+        <!--<menuitem name="Phone Calls Analysis"
             groups="base.group_sale_salesman"
             action="action_report_crm_phonecall"
-            id="menu_report_crm_phonecalls_tree" parent="base.next_id_64" sequence="15"/>
+            id="menu_report_crm_phonecalls_tree" parent="base.next_id_64" sequence="15"/>-->
 
     </data>
 </openerp>
