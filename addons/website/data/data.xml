@@ -13,9 +13,18 @@
             <field name="name">Top Menu</field>
         </record>
 
+        <!--
         <record id="menu_homepage" model="website.menu">
             <field name="name">Home</field>
             <field name="url">/page/homepage</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">10</field>
+        </record>
+        -->
+
+        <record id="menu_crm" model="website.menu">
+            <field name="name">Go to CRM</field>
+            <field name="url">/web</field>
             <field name="parent_id" ref="website.main_menu"/>
             <field name="sequence" type="int">10</field>
         </record>
@@ -72,6 +81,7 @@
             <field name="name">Website</field>
             <field name="sequence" eval="400"/>
             <field name="action" ref="action_website"/>
+            <field name="groups_id" eval="[(6,0, [ref('group_system'), ref('group_erp_manager')])]"/>
         </record>
         <record id="base.open_menu" model="ir.actions.todo">
             <field name="action_id" ref="action_website_tutorial"/>
