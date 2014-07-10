@@ -26,7 +26,8 @@ conf = openerp.tools.config
 # Path to the OpenERP Addons repository (comma-separated for
 # multiple locations)
 
-conf['addons_path'] = '../../addons/trunk,../../web/trunk/addons'
+conf['addons_path'] = './addons'
+conf['log_level'] = 'debug'
 
 # Optional database config if not using local socket
 #conf['db_name'] = 'mycompany'
