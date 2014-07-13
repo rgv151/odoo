@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import base64
 
-from openerp.tools.translate import _
-from openerp.addons.web import http
-from openerp.addons.web.http import request
-from openerp import SUPERUSER_ID
-
+import werkzeug
 import werkzeug.urls
 
+from openerp import http, SUPERUSER_ID
+from openerp.http import request
+from openerp.tools.translate import _
 
 class contactus(http.Controller):
 
@@ -63,7 +62,7 @@ class contactus(http.Controller):
             return request.website.render("website.contactus", values)
 
         try:
-            values['channel_id'] = request.registry['ir.model.data'].get_object_reference(request.cr, SUPERUSER_ID, 'crm', 'crm_case_channel_website')[1]
+            values['medium_id'] = request.registry['ir.model.data'].get_object_reference(request.cr, SUPERUSER_ID, 'crm', 'crm_tracking_medium_website')[1]
             values['section_id'] = request.registry['ir.model.data'].xmlid_to_res_id(request.cr, SUPERUSER_ID, 'website.salesteam_website_sales')
         except ValueError:
             pass

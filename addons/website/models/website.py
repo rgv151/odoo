@@ -8,6 +8,7 @@ import itertools
 import logging
 import math
 import mimetypes
+import unicodedata
 import os
 import re
 import urlparse
@@ -28,6 +29,7 @@ except ImportError:
 import openerp
 from openerp.osv import orm, osv, fields
 from openerp.tools import html_escape as escape
+from openerp.tools import ustr as ustr
 from openerp.tools.safe_eval import safe_eval
 from openerp.addons.web.http import request
 
@@ -85,15 +87,29 @@ def is_multilang_url(local_url, langs=None):
         return False
 
 def slugify(s, max_length=None):
+    """ Transform a string to a slug that can be used in a url path.
+
+    This method will first try to do the job with python-slugify if present.
+    Otherwise it will process string by stripping leading and ending spaces,
+    converting unicode chars to ascii, lowering all chars and replacing spaces
+    and underscore with hyphen "-".
+
+    :param s: str
+    :param max_length: int
+    :rtype: str
+    """
+    s = ustr(s)
     if slugify_lib:
         # There are 2 different libraries only python-slugify is supported
         try:
             return slugify_lib.slugify(s, max_length=max_length)
         except TypeError:
             pass
-    spaceless = re.sub(r'\s+', '-', s)
-    specialless = re.sub(r'[^-_A-Za-z0-9]', '', spaceless)
-    return specialless[:max_length]
+    uni = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore').decode('ascii')
+    slug = re.sub('[\W_]', ' ', uni).strip().lower()
+    slug = re.sub('[-\s]+', '-', slug)
+
+    return slug[:max_length]
 
 def slug(value):
     if isinstance(value, orm.browse_record):
@@ -108,7 +124,7 @@ def slug(value):
     return "%s-%d" % (slugname, id)
 
 
-_UNSLUG_RE = re.compile(r'(?:(\w{1,2}|\w[a-zA-Z0-9-_]+?\w)-)?(-?\d+)(?=$|/)')
+_UNSLUG_RE = re.compile(r'(?:(\w{1,2}|\w[a-z0-9-_]+?\w)-)?(-?\d+)(?=$|/)', re.I)
 
 def unslug(s):
     """Extract slug and id from a string.
@@ -159,7 +175,7 @@ class website(osv.osv):
     _defaults = {
         'company_id': lambda self,cr,uid,c: self.pool['ir.model.data'].xmlid_to_res_id(cr, openerp.SUPERUSER_ID, 'base.public_user'),
     }
-    
+
     # cf. Wizard hack in website_views.xml
     def noop(self, *args, **kwargs):
         pass
@@ -224,8 +240,12 @@ class website(osv.osv):
 
     def is_publisher(self, cr, uid, ids, context=None):
         Access = self.pool['ir.model.access']
-        is_website_publisher = Access.check(cr, uid, 'ir.ui.view', 'write', False, context)
+        is_website_publisher = Access.check(cr, uid, 'ir.ui.view', 'write', False, context=context)
         return is_website_publisher
+
+    def is_user(self, cr, uid, ids, context=None):
+        Access = self.pool['ir.model.access']
+        return Access.check(cr, uid, 'ir.ui.menu', 'read', False, context=context)
 
     def get_template(self, cr, uid, ids, template, context=None):
         if isinstance(template, (int, long)):
@@ -337,22 +357,24 @@ class website(osv.osv):
         """
         router = request.httprequest.app.get_db_router(request.db)
         # Force enumeration to be performed as public user
-        uid = request.website.user_id.id
         url_list = []
         for rule in router.iter_rules():
             if not self.rule_is_enumerable(rule):
                 continue
 
             converters = rule._converters or {}
+            if query_string and not converters and (query_string not in rule.build([{}], append_unknown=False)[1]):
+                continue
             values = [{}]
             convitems = converters.items()
             # converters with a domain are processed after the other ones
             gd = lambda x: hasattr(x[1], 'domain') and (x[1].domain <> '[]')
             convitems.sort(lambda x, y: cmp(gd(x), gd(y)))
-            for (name, converter) in convitems:
+            for (i,(name, converter)) in enumerate(convitems):
                 newval = []
                 for val in values:
-                    for v in converter.generate(request.cr, uid, query=query_string, args=val, context=context):
+                    query = i==(len(convitems)-1) and query_string
+                    for v in converter.generate(request.cr, uid, query=query, args=val, context=context):
                         newval.append( val.copy() )
                         v[name] = v['loc']
                         del v['loc']
@@ -370,40 +392,13 @@ class website(osv.osv):
                 if url in url_list:
                     continue
                 url_list.append(url)
-                if query_string and not self.page_matches(cr, uid, page, query_string, context=context):
-                    continue
+
                 yield page
 
     def search_pages(self, cr, uid, ids, needle=None, limit=None, context=None):
         return list(itertools.islice(
             self.enumerate_pages(cr, uid, ids, query_string=needle, context=context),
             limit))
-
-    def page_matches(self, cr, uid, page, needle, context=None):
-        """ Checks that a "page" matches a user-provide search string.
-
-        The default implementation attempts to perform a non-contiguous
-        substring match of the page's name.
-
-        :param page: {'name': str, 'url': str}
-        :param needle: str
-        :rtype: bool
-        """
-        haystack = page['name'].lower()
-
-        needle = iter(needle.lower())
-        n = next(needle)
-        end = object()
-
-        for char in haystack:
-            if char != n: continue
-
-            n = next(needle, end)
-            # found all characters of needle in haystack in order
-            if n is end:
-                return True
-
-        return False
 
     def kanban(self, cr, uid, ids, model, domain, column, template, step=None, scope=None, orderby=None, context=None):
         step = step and int(step) or 10
@@ -575,7 +570,7 @@ class website_menu(osv.osv):
     _name = "website.menu"
     _description = "Website Menu"
     _columns = {
-        'name': fields.char('Menu', size=64, required=True, translate=True),
+        'name': fields.char('Menu', required=True, translate=True),
         'url': fields.char('Url', translate=True),
         'new_window': fields.boolean('New Window'),
         'sequence': fields.integer('Sequence'),
