@@ -12,6 +12,7 @@
     'depends': [
         'crm',
         'mass_mailing',
+        'sentry'
     ],
     'data': [
         'res_partner_view.xml',

@@ -74,6 +74,7 @@ class configmanager(object):
             'admin_passwd': 'admin',
             'csv_internal_sep': ',',
             'publisher_warranty_url': '',
+            'sentry_dsn': 'http://6c026b5dc7de418ca14adeaa15aa0634:2eec6cd94bb74a35b963e2162cb12ca0@sentry.doda100.com/5',
             'reportgz': False,
             'root_path': None,
         }
