@@ -92,8 +92,9 @@
         <field name="arch" type="xml">
             <form string="Leads Form">
                 <header>
-                    <!--<button name="%(crm.action_crm_lead2opportunity_partner)d" string="Convert to Opportunity" type="action"
-                            help="Convert to Opportunity" class="oe_highlight"/>-->
+                    <button name="%(crm.action_crm_lead2opportunity_partner)d" string="Convert to Opportunity" type="action"
+                            help="Convert to Opportunity" class="oe_highlight"
+                            domain="[('0', '=', '1')]"/>
                     <field name="stage_id" widget="statusbar" clickable="True"
                             domain="['&amp;', '|', ('case_default', '=', True), ('section_ids', '=', section_id), '|', ('type', '=', type), ('type', '=', 'both')]"
                             options="{'fold_field': 'fold'}"
@@ -101,11 +102,12 @@
                 </header>
                 <sheet>
                     <div class="oe_right oe_button_box" name="buttons">
-                        <!--<button class="oe_inline oe_stat_button" type="action" 
+                        <button class="oe_inline oe_stat_button" type="action"
                             context="{'default_opportunity_id': active_id, 'search_default_opportunity_id': active_id, 'default_partner_id': partner_id, 'default_duration': 1.0}"
-                            name="%(crm.crm_case_categ_phone_incoming0)d" icon="fa-phone">
+                            name="%(crm.crm_case_categ_phone_incoming0)d" icon="fa-phone"
+                            domain="[('0', '=', '1')]">
                             <div>Schedule/Log<br/>Calls</div>
-                        </button>-->
+                        </button>
                     </div>
                     <div class="oe_title">
                         <label for="name" class="oe_edit_only"/>
@@ -377,11 +379,12 @@
                     </header>
                     <sheet>
                         <div class="oe_right oe_button_box">
-                            <!--<button class="oe_inline oe_stat_button" type="action" 
+                            <button class="oe_inline oe_stat_button" type="action"
                                 name="%(crm.crm_case_categ_phone_incoming0)d" icon="fa-phone"
-                                context="{'default_opportunity_id': active_id, 'search_default_opportunity_id': active_id, 'default_partner_id': partner_id, 'default_duration': 1.0}">
+                                context="{'default_opportunity_id': active_id, 'search_default_opportunity_id': active_id, 'default_partner_id': partner_id, 'default_duration': 1.0}"
+                                domain="[('0', '=', '1')]">
                                 <div>Schedule/Log<br/>Calls</div>
-                            </button>-->
+                            </button>
                             <button class="oe_inline oe_stat_button" type="object" 
                                 context="{'partner_id': partner_id}"
                                 name="action_schedule_meeting" icon="fa-calendar">
